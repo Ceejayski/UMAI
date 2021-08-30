@@ -3,5 +3,5 @@ class User < ApplicationRecord
   validates_uniqueness_of :login
 
   has_secure_password
-  has_many: Post
+  has_many :posts, dependent: :destroy
 end

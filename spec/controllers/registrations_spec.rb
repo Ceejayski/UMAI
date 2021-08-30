@@ -46,7 +46,6 @@ RSpec.describe RegistrationsController, type: :controller do
 
     it 'should return 201 http status code' do
       post :create, params: params
-      pp response.body
       expect(response).to have_http_status(201)
     end
 
