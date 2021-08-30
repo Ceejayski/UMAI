@@ -23,6 +23,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'pg'
+gem 'active_record-pgcrypto', '~> 0.2'
 gem 'rack-cors'
 
 group :development, :test do
@@ -42,10 +43,15 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 # JSON serializer
+gem 'jsonapi.rb', '~> 1'
 gem 'jsonapi-serializer'
 # Environment variabke intializer
 gem 'figaro'
+# authorization method
+gem 'jwt'
 # Pagination gem
 gem 'kaminari'
 # background Worker
 gem 'sidekiq'
+gem 'simple_command'
+gem 'jsonapi-rails'
