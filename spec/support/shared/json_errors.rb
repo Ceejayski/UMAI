@@ -26,7 +26,8 @@ end
 
 shared_examples_for 'forbidden_requests' do
   let(:authorization_error) do
-    'Unauthorized'
+    [{ 'detail' => "Can't Find post under current user", 'source' => { 'pointer' => '/headers/authorization' },
+       'status' => '403', 'title' => 'Not authorized' }]
   end
 
   it 'should return 403 status code' do
@@ -37,8 +38,7 @@ shared_examples_for 'forbidden_requests' do
   it 'should return proper error json' do
     subject
     json = JSON.parse(response.body)
-    pp json
-    expect(json['error']).to include(authorization_error)
+    expect(json['errors']).to eql(authorization_error)
   end
 end
 

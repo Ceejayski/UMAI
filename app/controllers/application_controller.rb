@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    render json: { error: 'Unauthorized' }, status: 403 unless @current_user
+    authorization_error unless @current_user
   end
 
   def current_page
@@ -21,5 +21,15 @@ class ApplicationController < ActionController::API
     return params[:per_page] if params[:per_page].is_a?(String)
 
     params.dig(:page, :size) if params[:page].is_a?(Hash)
+  end
+
+  def authorization_error
+    errors = {
+      "status" => "403",
+      "source" => { "pointer" => "/headers/authorization" },
+      "title" =>  "Not authorized",
+      "detail" => "Can't Find post under current user"
+    }
+    render json: { "errors": [ errors ] }, status: 403
   end
 end

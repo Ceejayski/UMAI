@@ -118,4 +118,120 @@ RSpec.describe PostsController, type: :controller do
       end
     end
   end
+
+  describe '#update' do
+    let(:post) { create :post }
+    subject { patch :update, params: { id: post.id } }
+
+    context 'when no code provided' do
+      it_behaves_like 'forbidden_requests'
+    end
+
+    context 'when invalid code provided' do
+      before { request.headers['authorization'] = 'Invalid token' }
+      it_behaves_like 'forbidden_requests'
+    end
+    context 'when authorised' do
+      let(:user) { create :user }
+      let(:user2) { create :user }
+      let(:post) { create :post, user: user }
+      let(:post2) { create :post, user: user2 }
+      let(:params) do
+        {
+          id: post.id,
+          data: {
+            attributes: {
+              title: 'new',
+              content: 'new'
+            }
+          }
+        }
+      end
+      before do
+        allow(AuthorizeApiRequest).to receive_message_chain(:call, :result).and_return(user)
+      end
+      subject { patch :update, params: params }
+      context "when user tries to edit someone else's post" do
+        let(:params) do
+          {
+            id: post2.id,
+            data: {
+              attributes: {
+                title: 'new',
+                content: 'new'
+              }
+            }
+          }
+        end
+        it_behaves_like 'forbidden_requests'
+      end
+      context 'when invalid parameters provided' do
+        let(:invalid_attributes) do
+          {
+            data: {
+              attributes: {
+                title: '',
+                content: ''
+              }
+            }
+          }
+        end
+        subject do
+          patch :update, params: invalid_attributes.merge(id: post.id)
+        end
+        it 'should return 422 status code' do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it 'should return proper error json' do
+          subject
+          expect(json_data['errors']).to eq(
+            [{ 'code' => 'blank',
+               'detail' => "Title can't be blank",
+               'source' => { 'pointer' => '/data/attributes/title' },
+               'status' => '422',
+               'title' => 'Unprocessable Entity' },
+             { 'code' => 'blank',
+               'detail' => "Content can't be blank",
+               'source' => { 'pointer' => '/data/attributes/content' },
+               'status' => '422',
+               'title' => 'Unprocessable Entity' }]
+          )
+        end
+      end
+      context 'when valid parameters are given' do
+        let(:valid_attributes) do
+          {
+            'data' => {
+              'attributes' => {
+                'title' => 'Awesome post',
+                'content' => 'Super content'
+              }
+            }
+          }
+        end
+        subject do
+          patch :update, params: valid_attributes.merge(id: post.id)
+        end
+        it 'should have 200 status code' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'should have proper json body' do
+          subject
+          expect(json_data['data']['attributes']).to include(
+            valid_attributes['data']['attributes']
+          )
+        end
+        it 'should update the post' do
+          subject
+          expect(post.reload.title).to eq(
+            valid_attributes['data']['attributes']['title']
+          )
+        end
+      end
+    end
+  end
 end
