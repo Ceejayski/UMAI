@@ -13,7 +13,7 @@ require 'ipaddr'
   User.create(login: Faker::Book.unique.author, password: '123', password_confirmation: '123')
 end
 
-200.times do
+200_000.times do
   Post.create(
     title: Faker::Book.title,
     content: Faker::Lorem.paragraphs(number: rand(5..7)),
@@ -29,7 +29,7 @@ end
   )
 end
 
-10.times do
+100.times do
   Rating.create(
     value: Faker::Number.between(from: 1, to: 5),
     user_id: User.limit(1).order('RANDOM()').first.id, # sql random
@@ -37,8 +37,8 @@ end
   )
 end
 
-10.times do
-  post =  Post.limit(1).order('RANDOM()').first
+10_000.times do
+  post = Post.limit(1).order('RANDOM()').first
   Feedback.create(
     comment: post.average_rating,
     owner_id: post.id,
@@ -47,8 +47,8 @@ end
   )
 end
 
-10.times do
-  post =  User.limit(1).order('RANDOM()').first
+50.times do
+  post = User.limit(1).order('RANDOM()').first
   Feedback.create(
     comment: nil,
     owner_id: post.id,
