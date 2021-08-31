@@ -8,6 +8,5 @@ RSpec.describe Post, type: :model do
 
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:content) }
-  it { should validate_presence_of(:ip_address) }
   it { should belong_to :user }
 end

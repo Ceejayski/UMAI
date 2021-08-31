@@ -52,6 +52,5 @@ gem 'jwt'
 # Pagination gem
 gem 'kaminari'
 # background Worker
-gem 'sidekiq'
 gem 'simple_command'
 gem 'jsonapi-rails'

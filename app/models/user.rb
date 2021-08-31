@@ -4,4 +4,7 @@ class User < ApplicationRecord
 
   has_secure_password
   has_many :posts, dependent: :destroy
+  has_many :ratings, dependent: :destroy
+  has_many :ips, dependent: :destroy
+  has_many :feedbacks, as: :owner
 end

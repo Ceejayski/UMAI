@@ -9,8 +9,9 @@ class PostsController < ApplicationController
   end
 
   def create
-    post = current_user.posts.build(post_params.merge(ip_address: request.remote_ip))
+    post = current_user.posts.build(post_params)
     post.save!
+    post.ips.create(ip_address: request.remote_ip, login: current_user.login)
     render jsonapi: post, status: :created
   rescue ActiveRecord::RecordInvalid
     render jsonapi_errors: post.errors, status: :unprocessable_entity
@@ -18,7 +19,8 @@ class PostsController < ApplicationController
 
   def update
     post = current_user.posts.find(params[:id])
-    post.update!(post_params.merge(ip_address: request.remote_ip))
+    post.update!(post_params)
+    post.ips.create(ip_address: request.remote_ip, login: current_user.login)
     render jsonapi: post, status: :ok
   rescue ActiveRecord::RecordNotFound
     authorization_error

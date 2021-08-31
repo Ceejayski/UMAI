@@ -10,16 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_30_190214) do
+ActiveRecord::Schema.define(version: 2021_08_31_095145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "feedbacks", force: :cascade do |t|
+    t.text "comment"
+    t.string "owner_type"
+    t.bigint "owner_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_id", "owner_type"], name: "index_feedbacks_on_owner_id_and_owner_type"
+    t.index ["owner_type", "owner_id"], name: "index_feedbacks_on_owner"
+  end
+
+  create_table "ips", force: :cascade do |t|
+    t.string "ip_address"
+    t.bigint "post_id", null: false
+    t.string "login"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_ips_on_post_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.string "content"
-    t.string "ip_address"
     t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -43,6 +61,7 @@ ActiveRecord::Schema.define(version: 2021_08_30_190214) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "ips", "posts"
   add_foreign_key "posts", "users"
   add_foreign_key "ratings", "posts"
   add_foreign_key "ratings", "users"

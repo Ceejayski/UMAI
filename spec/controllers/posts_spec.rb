@@ -16,8 +16,8 @@ RSpec.describe PostsController, type: :controller do
       Post.recent.last do |post, index|
         expect(json_data[index]['attributes']).to eq({
                                                        'title' => post.title,
-                                                       'content' => post.content,
-                                                       'ip_address' => post.ip_address
+                                                       'content' => post.content
+
                                                      })
       end
     end
@@ -50,12 +50,7 @@ RSpec.describe PostsController, type: :controller do
 
     it 'should return proper json' do
       subject
-      expect(json_data['data']['attributes']).to eq({
-                                                      'id' => post.id,
-                                                      'title' => post.title,
-                                                      'content' => post.content,
-                                                      'ip_address' => post.ip_address
-                                                    })
+      expect(json_data['data']['attributes']['avg_ratings']).to eq( 0.0)
     end
   end
 
@@ -77,8 +72,8 @@ RSpec.describe PostsController, type: :controller do
           data: {
             attributes: {
               title: 'new',
-              content: 'new',
-              ip_address: 'new'
+              content: 'new'
+
             }
           }
         }
@@ -95,7 +90,7 @@ RSpec.describe PostsController, type: :controller do
 
       it 'when post is valid' do
         subject
-        pp Post.all
+
       end
 
       context 'when post is invalid' do
@@ -104,8 +99,8 @@ RSpec.describe PostsController, type: :controller do
             data: {
               attributes: {
                 title: 'new',
-                content: '',
-                ip_address: ''
+                content: ''
+
               }
             }
           }
