@@ -29,7 +29,7 @@ $ docker-compose run --rm -e RAILS_ENV=test app rake
 
 ### Get a local copy
 
-`$ git clone git@github.com:Ceejayski/Sound-dome.git`
+`$ git clone https://github.com/Ceejayski/UMAI`
 
 ### Initial Setup
 
