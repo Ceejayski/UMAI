@@ -1,0 +1,4 @@
+feedback_xml_generator_job:
+  cron: '0 9 * * *'
+  class: 'FeedbackXmlGeneratorJob'
+  queue: default

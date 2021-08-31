@@ -54,3 +54,8 @@ gem 'kaminari'
 # background Worker
 gem 'simple_command'
 gem 'jsonapi-rails'
+gem 'sidekiq'
+gem "sidekiq-cron", "~> 1.1"
+gem 'faker'
+gem 'ipaddr', '~> 1.2'
+gem 'nokogiri'

@@ -3,6 +3,7 @@ class CreateFeedbacks < ActiveRecord::Migration[6.1]
     create_table :feedbacks do |t|
       t.text :comment
       t.belongs_to :owner, polymorphic: true
+      t.text :other_feedbacks, array: true, default: []
 
       t.timestamps
     end

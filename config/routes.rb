@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  require 'sidekiq/cron/web'
+  mount Sidekiq::Web => "/sidekiq"
   get 'ips', to: 'ips#index'
   post 'login', to: 'authentications#authenticate'
   post 'sign_up', to: 'registrations#create'
