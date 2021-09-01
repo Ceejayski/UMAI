@@ -4,4 +4,5 @@ class PostSerializer
   has_one :user
   has_many :ip
   has_many :rating
+  has_many :feedback
 end

@@ -12,6 +12,7 @@ class PostsController < ApplicationController
     post = current_user.posts.build(post_params)
     post.save!
     post.ips.create(ip_address: request.remote_ip, login: current_user.login)
+    post.feedbacks.create(comment: post.avg_ratings)
     render jsonapi: post, status: :created
   rescue ActiveRecord::RecordInvalid
     render jsonapi_errors: post.errors, status: :unprocessable_entity

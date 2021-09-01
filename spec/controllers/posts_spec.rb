@@ -90,7 +90,8 @@ RSpec.describe PostsController, type: :controller do
 
       it 'when post is valid' do
         subject
-
+        pp json_data
+        expect(response).to have_http_status(201)
       end
 
       context 'when post is invalid' do
