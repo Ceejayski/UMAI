@@ -5,6 +5,6 @@ class FeedbackSerializer
   attributes :comment
   belongs_to :owner
   attributes :owner_feedbacks do |object|
-    Feedback.where(owner_id: object.owner_id, owner_type: object.owner_type)
+    Feedback.where(owner_id: object.owner_id, owner_type: object.owner_type).map(&:id)
   end
 end
