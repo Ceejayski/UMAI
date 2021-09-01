@@ -4,6 +4,7 @@ class RegistrationsController < ApplicationController
   def create
     user = User.new(registration_params)
     user.save!
+    user.feedbacks.create()
     render jsonapi: user, status: :created
   rescue ActiveRecord::RecordInvalid
     render  jsonapi_errors: user.errors, status: :unprocessable_entity
