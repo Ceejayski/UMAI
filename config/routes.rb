@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'feedbacks', to: 'feedbacks#index'
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
   mount Sidekiq::Web => "/sidekiq"

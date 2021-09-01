@@ -43,7 +43,7 @@ RSpec.describe RatingsController, type: :controller do
       subject
       relationships = json_data.first['relationships']
       expect(relationships['post']['data']['id'].to_i).to eq(post1.id)
-      expect(relationships['user']['data']['id']).to eq(user.id)
+      expect(relationships['user']['data']['id'].to_i).to eq(user.id)
     end
   end
 

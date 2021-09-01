@@ -2,7 +2,7 @@ class PostsController < ApplicationController
   skip_before_action :authenticate_request, only: %i[index show]
 
   def index
-    posts = Post.recent
+    posts = Post.highest_rated
                 .page(current_page)
                 .per(per_page)
     render jsonapi: posts

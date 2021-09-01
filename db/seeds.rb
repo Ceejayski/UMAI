@@ -9,11 +9,8 @@
 require 'faker'
 require 'ipaddr'
 
-100.times do
-  User.create(login: Faker::Book.unique.author, password: '123', password_confirmation: '123')
-end
-
-200_000.times do
+200_000.times do |n|
+  User.create(login: Faker::Book.unique.author, password: '123', password_confirmation: '123') if n <= 100
   Post.create(
     title: Faker::Book.title,
     content: Faker::Lorem.paragraphs(number: rand(5..7)),
@@ -21,38 +18,31 @@ end
   )
 end
 
-50.times do
-  Ip.create(
-    ip_address: IPAddr.new(rand(2**32), Socket::AF_INET),
-    login: User.limit(1).order('RANDOM()').first.login, # sql random
-    post_id: Post.limit(1).order('RANDOM()').first.id
-  )
-end
-
-100.times do
-  Rating.create(
-    value: Faker::Number.between(from: 1, to: 5),
-    user_id: User.limit(1).order('RANDOM()').first.id, # sql random
-    post_id: Post.limit(1).order('RANDOM()').first.id
-  )
-end
-
-10_000.times do
+10_000.times do |n|
+  if n <= 50
+    Ip.create(
+      ip_address: IPAddr.new(rand(2**32), Socket::AF_INET),
+      login: User.limit(1).order('RANDOM()').first.login, # sql random
+      post_id: Post.limit(1).order('RANDOM()').first.id
+    )
+    user = User.limit(1).order('RANDOM()').first
+    Feedback.create(
+      comment: nil,
+      owner_id: user.id,
+      owner_type: 'User'
+    )
+  elsif n <= 100
+    post = Post.limit(1).order('RANDOM()').first
+    post.ratings.create(
+      value: Faker::Number.between(from: 1, to: 5),
+      user_id: User.limit(1).order('RANDOM()').first.id, # sql random
+      post_id: Post.limit(1).order('RANDOM()').first.id
+    )
+  end
   post = Post.limit(1).order('RANDOM()').first
   Feedback.create(
-    comment: post.average_rating,
+    comment: post.avg_ratings,
     owner_id: post.id,
-    owner_type: 'Post',
-    other_feedbacks: Feedback.where(owner_id: post.id, owner_type: 'Post').map(&:id)
-  )
-end
-
-50.times do
-  post = User.limit(1).order('RANDOM()').first
-  Feedback.create(
-    comment: nil,
-    owner_id: post.id,
-    owner_type: 'User',
-    other_feedbacks: Feedback.where(owner_id: post.id, owner_type: 'user').map(&:id)
+    owner_type: 'Post'
   )
 end
