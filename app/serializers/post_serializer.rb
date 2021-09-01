@@ -1,10 +1,7 @@
 class PostSerializer
   include JSONAPI::Serializer
-  attributes :id, :title, :content 
+  attributes :id, :title, :content, :avg_ratings
   has_one :user
   has_many :ip
   has_many :rating
-  attributes :avg_ratings do |object|
-    object.average_rating
-  end
 end

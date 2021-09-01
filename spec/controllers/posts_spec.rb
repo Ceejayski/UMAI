@@ -13,7 +13,7 @@ RSpec.describe PostsController, type: :controller do
     it 'should return proper json' do
       create_list :post, 1
       subject
-      Post.recent.last do |post, index|
+      Post.highest_rated.last do |post, index|
         expect(json_data[index]['attributes']).to eq({
                                                        'title' => post.title,
                                                        'content' => post.content
@@ -34,7 +34,7 @@ RSpec.describe PostsController, type: :controller do
       create_list :post, 3
       get :index, params: { page: 2, per_page: 1 }
       expect(json_data.length).to eq 1
-      expected_post = Post.recent.second.id
+      expected_post = Post.highest_rated.second.id
       expect(json_data['data'].first['id'].to_i).to eq(expected_post)
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe PostsController, type: :controller do
 
     it 'should return proper json' do
       subject
-      expect(json_data['data']['attributes']['avg_ratings']).to eq( 0.0)
+      expect(json_data['data']['attributes']['avg_ratings']).to eq( 8)
     end
   end
 
