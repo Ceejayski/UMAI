@@ -1,5 +1,5 @@
 # UMAI API Test
-It is required to create a JSON API service in Ruby without using Ruby on Rails.
+It is required to create a JSON API service in Ruby with Ruby on Rails.
 ## General
 Entities: The platform is split into 4 main components.
 1. User - has only a login authenticated using JWT tokens.
